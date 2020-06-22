@@ -38,3 +38,4 @@ chore_sethostcleanupfinalizationgroupcallback_has_been_removed_from.patch
 fix_remove_bad_semicolon_outside_fn.patch
 fix_comment_out_incompatible_crypto_modules.patch
 test_account_for_non-node_basename.patch
+fix_wconstant-conversion_in_node_buffer.patch

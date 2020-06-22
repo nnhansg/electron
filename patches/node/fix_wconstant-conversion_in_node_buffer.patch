@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: deepak1556 <hop2deep@gmail.com>
+Date: Sun, 21 Jun 2020 19:48:19 -0700
+Subject: fix: Wconstant-conversion in node_buffer
+
+Should be upstreamed.
+
+diff --git a/src/node_buffer.cc b/src/node_buffer.cc
+index 59baa45413d500272d0e293ab06bfe4d24e5e0cb..4d1951b740240bff231b7f4c855beb5b73d076af 100644
+--- a/src/node_buffer.cc
++++ b/src/node_buffer.cc
+@@ -62,6 +62,7 @@ using v8::Local;
+ using v8::Maybe;
+ using v8::MaybeLocal;
+ using v8::Nothing;
++using v8::Number;
+ using v8::Object;
+ using v8::String;
+ using v8::Uint32;
+@@ -1161,7 +1162,7 @@ void Initialize(Local<Object> target,
+ 
+   target->Set(env->context(),
+               FIXED_ONE_BYTE_STRING(env->isolate(), "kMaxLength"),
+-              Integer::NewFromUnsigned(env->isolate(), kMaxLength)).Check();
++              Number::New(env->isolate(), kMaxLength)).Check();
+ 
+   target->Set(env->context(),
+               FIXED_ONE_BYTE_STRING(env->isolate(), "kStringMaxLength"),
+diff --git a/src/node_buffer.h b/src/node_buffer.h
+index 11010017ce0df8367b1992bd9df57117ff50454d..606a6f5caa3b11b6d2a9068ed2fd65800530a5eb 100644
+--- a/src/node_buffer.h
++++ b/src/node_buffer.h
+@@ -29,7 +29,7 @@ namespace node {
+ 
+ namespace Buffer {
+ 
+-static const unsigned int kMaxLength = v8::TypedArray::kMaxLength;
++static const size_t kMaxLength = v8::TypedArray::kMaxLength;
+ 
+ typedef void (*FreeCallback)(char* data, void* hint);
+ 
